@@ -4,6 +4,14 @@
 
 node_modules
 vendor
+
+# Tooling frontend bawaan skeleton Laravel. Kalau ikut terkirim, Vercel
+# mendeteksinya sebagai proyek Vite lalu mencari folder "dist".
+package.json
+package-lock.json
+vite.config.js
+resources/css
+resources/js
 tests
 storage/logs/*
 storage/framework/cache/*

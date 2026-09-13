@@ -336,6 +336,25 @@ curl https://nama-project.vercel.app/api/obat?per_page=3
 
 `/api/health` akan menjawab `"database": "connected"` kalau koneksi MySQL berhasil.
 
+### 6.6 Troubleshooting
+
+**`No Output Directory named "dist" found after the Build completed`**
+
+Skeleton Laravel membawa `package.json` + `vite.config.js`, sehingga Vercel mengira ini
+proyek Vite, menjalankan `vite build`, lalu mencari folder `dist`. Proyek ini API-only,
+jadi `vercel.json` sudah menimpa pengaturan tersebut:
+
+```json
+"framework": null,
+"installCommand": "",
+"buildCommand": "echo 'API only: tidak ada build frontend'",
+"outputDirectory": "public"
+```
+
+dan `.vercelignore` menahan `package.json` / `vite.config.js` agar tidak ikut terkirim.
+Nilai di `vercel.json` selalu menang atas Project Settings di dashboard, jadi tidak perlu
+mengubah apa pun di sana. Cukup commit lalu **Redeploy**.
+
 ---
 
 ## 7. Testing

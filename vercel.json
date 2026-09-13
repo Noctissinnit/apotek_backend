@@ -1,6 +1,9 @@
 {
-    "version": 2,
+    "$schema": "https://openapi.vercel.sh/vercel.json",
     "framework": null,
+    "installCommand": "",
+    "buildCommand": "echo 'API only: tidak ada build frontend'",
+    "outputDirectory": "public",
     "functions": {
         "api/*.php": {
             "runtime": "vercel-php@0.9.0",
