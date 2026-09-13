@@ -10,5 +10,6 @@ return [
     /*
     | Batas request per menit per IP untuk seluruh route /api.
     */
-    'rate_limit' => (int) env('API_RATE_LIMIT', 60),
+    // Nilai kosong/0 jangan sampai jadi limit 0 (semua request kena 429).
+    'rate_limit' => max(1, (int) (env('API_RATE_LIMIT') ?: 60)),
 ];

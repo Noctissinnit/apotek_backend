@@ -355,6 +355,25 @@ dan `.vercelignore` menahan `package.json` / `vite.config.js` agar tidak ikut te
 Nilai di `vercel.json` selalu menang atas Project Settings di dashboard, jadi tidak perlu
 mengubah apa pun di sana. Cukup commit lalu **Redeploy**.
 
+**`date_default_timezone_set(): Timezone ID '' is invalid`** (atau error lain soal nilai `[]`)
+
+Ada Environment Variable di Vercel yang **dibuat tapi nilainya kosong**. Fallback bawaan
+`env('X', 'default')` hanya berlaku kalau variabelnya tidak ada sama sekali, jadi string
+kosong ikut terbaca. Config proyek ini sudah memakai `env('X') ?: 'default'` untuk
+variabel yang fatal kalau kosong:
+
+| Variabel | Fallback kalau kosong |
+|---|---|
+| `APP_TIMEZONE` | `Asia/Jakarta` |
+| `CACHE_STORE` | `array` |
+| `SESSION_DRIVER` | `array` |
+| `DB_CONNECTION` | `mysql` |
+| `API_RATE_LIMIT` | `60` |
+| `DB_TIMEOUT` | `10` |
+
+Tetap rapikan dashboard: hapus variabel yang tidak dipakai, dan pastikan `APP_KEY`
+serta `DB_HOST` / `DB_DATABASE` / `DB_USERNAME` / `DB_PASSWORD` benar-benar terisi.
+
 ---
 
 ## 7. Testing

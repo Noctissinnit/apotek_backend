@@ -15,7 +15,9 @@ return [
     |
     */
 
-    'default' => env('CACHE_STORE', 'database'),
+    // ?: menangani CACHE_STORE yang di-set kosong. Serverless tidak punya
+    // penyimpanan persisten, jadi fallback ke array.
+    'default' => env('CACHE_STORE') ?: 'array',
 
     /*
     |--------------------------------------------------------------------------

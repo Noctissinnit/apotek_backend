@@ -65,7 +65,9 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    // Pakai ?: (bukan default env()) supaya APP_TIMEZONE yang di-set kosong,
+    // misalnya di dashboard Vercel, tetap jatuh ke nilai valid.
+    'timezone' => env('APP_TIMEZONE') ?: 'Asia/Jakarta',
 
     /*
     |--------------------------------------------------------------------------

@@ -17,7 +17,8 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    // ?: menangani DB_CONNECTION yang di-set kosong. Target proyek ini MySQL.
+    'default' => env('DB_CONNECTION') ?: 'mysql',
 
     /*
     |--------------------------------------------------------------------------
@@ -65,12 +66,15 @@ return [
                 // MySQL cloud (Aiven, TiDB Cloud, Railway) memaksa TLS. Kalau
                 // provider tidak menyediakan file CA, set DB_SSL_VERIFY=false
                 // supaya koneksi tetap terenkripsi tanpa verifikasi sertifikat.
-                (PHP_VERSION_ID >= 80500 ? Mysql::ATTR_SSL_VERIFY_SERVER_CERT : PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT) => env('DB_SSL_VERIFY') === null
+                (PHP_VERSION_ID >= 80500 ? Mysql::ATTR_SSL_VERIFY_SERVER_CERT : PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT) => blank(env('DB_SSL_VERIFY'))
                     ? null
                     : filter_var(env('DB_SSL_VERIFY'), FILTER_VALIDATE_BOOLEAN),
 
-                PDO::ATTR_TIMEOUT => (int) env('DB_TIMEOUT', 10),
-            ], fn ($value) => ! is_null($value)) : [],
+                PDO::ATTR_TIMEOUT => (int) (env('DB_TIMEOUT') ?: 10),
+
+            // Buang null dan string kosong (env yang di-set tapi kosong), tapi
+            // pertahankan false supaya DB_SSL_VERIFY=false tetap berlaku.
+            ], fn ($value) => ! is_null($value) && $value !== '') : [],
         ],
 
         'mariadb' => [

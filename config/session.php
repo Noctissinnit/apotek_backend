@@ -18,7 +18,8 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    // ?: menangani SESSION_DRIVER yang di-set kosong; API ini stateless.
+    'driver' => env('SESSION_DRIVER') ?: 'array',
 
     /*
     |--------------------------------------------------------------------------
