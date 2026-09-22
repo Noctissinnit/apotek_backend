@@ -1,15 +1,15 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "apotek/backend-api",
+    "name": "apotek/aplikasi-apotek",
     "type": "project",
-    "description": "REST API backend apotek (obat, kategori, supplier, penjualan) - Laravel 12 + MySQL, siap deploy ke Vercel.",
+    "description": "Aplikasi web apotek (kasir, obat, stok, kategori, supplier, user admin/kasir) - Laravel 12 + MySQL.",
     "keywords": [
         "laravel",
-        "rest-api",
         "apotek",
         "pharmacy",
-        "mysql",
-        "vercel"
+        "kasir",
+        "pos",
+        "mysql"
     ],
     "license": "MIT",
     "require": {

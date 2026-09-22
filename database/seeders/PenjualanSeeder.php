@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Obat;
 use App\Models\Penjualan;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -19,6 +20,7 @@ class PenjualanSeeder extends Seeder
         $metode = ['tunai', 'tunai', 'qris', 'debit', 'tunai', 'qris', 'transfer', 'tunai'];
 
         $urutan = [];
+        $kasir = User::where('role', User::ROLE_KASIR)->orderBy('id')->pluck('id')->all();
 
         foreach ($pelanggan as $i => $nama) {
             $tanggal = now()->subDays(7 - intdiv($i, 2))->setTime(9 + ($i % 8), rand(0, 59));
@@ -33,7 +35,7 @@ class PenjualanSeeder extends Seeder
                 continue;
             }
 
-            DB::transaction(function () use ($obatDijual, $nama, $tanggal, $metode, $i, &$urutan) {
+            DB::transaction(function () use ($obatDijual, $nama, $tanggal, $metode, $i, $kasir, &$urutan) {
                 $baris = [];
                 $total = 0.0;
 
@@ -59,6 +61,8 @@ class PenjualanSeeder extends Seeder
                 $urutan[$kunci] = ($urutan[$kunci] ?? 0) + 1;
 
                 $penjualan = Penjualan::create([
+                    // Transaksi dibagi bergantian ke kasir pagi & sore.
+                    'user_id' => $kasir ? $kasir[$i % count($kasir)] : null,
                     'kode_transaksi' => 'TRX-'.$kunci.'-'.str_pad((string) $urutan[$kunci], 4, '0', STR_PAD_LEFT),
                     'tanggal' => $tanggal,
                     'nama_pelanggan' => $nama,

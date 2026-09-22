@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Penjualan extends Model
@@ -13,7 +14,7 @@ class Penjualan extends Model
     protected $table = 'penjualan';
 
     protected $fillable = [
-        'kode_transaksi', 'tanggal', 'nama_pelanggan',
+        'user_id', 'kode_transaksi', 'tanggal', 'nama_pelanggan',
         'total', 'bayar', 'kembalian', 'metode_bayar', 'catatan',
     ];
 
@@ -25,6 +26,12 @@ class Penjualan extends Model
             'bayar' => 'decimal:2',
             'kembalian' => 'decimal:2',
         ];
+    }
+
+    /** Kasir yang mencatat transaksi. */
+    public function kasir(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function detail(): HasMany

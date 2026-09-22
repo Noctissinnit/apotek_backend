@@ -15,9 +15,9 @@ return [
     |
     */
 
-    // ?: menangani CACHE_STORE yang di-set kosong. Serverless tidak punya
-    // penyimpanan persisten, jadi fallback ke array.
-    'default' => env('CACHE_STORE') ?: 'array',
+    // ?: menangani CACHE_STORE yang di-set kosong. database dipakai supaya
+    // batas percobaan login tetap tercatat, termasuk di Vercel.
+    'default' => env('CACHE_STORE') ?: 'database',
 
     /*
     |--------------------------------------------------------------------------

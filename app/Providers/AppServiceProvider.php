@@ -4,8 +4,11 @@ namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,9 +25,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(config('apotek.rate_limit'))
-                ->by($request->header('X-API-KEY') ?: $request->ip());
+        Paginator::useBootstrapFive();
+
+        // @rupiah($angka) -> Rp 12.500
+        Blade::directive('rupiah', fn (string $ekspresi) => "<?php echo 'Rp '.number_format((float) ($ekspresi), 0, ',', '.'); ?>");
+
+        // Tahan tebak-tebakan password: dihitung per kombinasi email + IP.
+        RateLimiter::for('login', function (Request $request) {
+            $kunci = Str::lower((string) $request->input('email')).'|'.$request->ip();
+
+            return Limit::perMinute(config('apotek.login_rate_limit'))
+                ->by($kunci)
+                ->response(fn () => back()
+                    ->onlyInput('email')
+                    ->withErrors(['email' => 'Terlalu banyak percobaan login. Coba lagi dalam 1 menit.']));
         });
     }
 }

@@ -12,6 +12,20 @@ class PenjualanRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Form kasir bisa mengirim baris kosong (baris ditambah tapi obatnya belum
+     * dipilih). Buang baris itu dulu supaya tidak dianggap error.
+     */
+    protected function prepareForValidation(): void
+    {
+        $items = collect($this->input('items', []))
+            ->filter(fn ($item) => is_array($item) && filled($item['obat_id'] ?? null))
+            ->values()
+            ->all();
+
+        $this->merge(['items' => $items]);
+    }
+
     public function rules(): array
     {
         return [

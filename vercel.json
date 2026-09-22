@@ -2,7 +2,7 @@
     "$schema": "https://openapi.vercel.sh/vercel.json",
     "framework": null,
     "installCommand": "",
-    "buildCommand": "echo 'API only: tidak ada build frontend'",
+    "buildCommand": "echo 'Tanpa build frontend: CSS/JS sudah ada di public/vendor'",
     "outputDirectory": "public",
     "functions": {
         "api/*.php": {
@@ -11,6 +11,13 @@
         }
     },
     "routes": [
+        {
+            "src": "/index\\.php",
+            "dest": "/api/index.php"
+        },
+        {
+            "handle": "filesystem"
+        },
         {
             "src": "/(.*)",
             "dest": "/api/index.php"

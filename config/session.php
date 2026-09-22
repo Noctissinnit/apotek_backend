@@ -18,8 +18,9 @@ return [
     |
     */
 
-    // ?: menangani SESSION_DRIVER yang di-set kosong; API ini stateless.
-    'driver' => env('SESSION_DRIVER') ?: 'array',
+    // ?: menangani SESSION_DRIVER yang di-set kosong. Login butuh session yang
+    // tersimpan antar-request; database juga aman untuk Vercel (serverless).
+    'driver' => env('SESSION_DRIVER') ?: 'database',
 
     /*
     |--------------------------------------------------------------------------

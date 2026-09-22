@@ -2,14 +2,16 @@
 
 return [
     /*
-    | Kunci untuk endpoint tulis. Kosongkan saat development supaya API bebas
-    | dicoba; isi lewat env di production (Vercel > Settings > Environment Variables).
+    | Batas percobaan login per menit untuk kombinasi email + IP,
+    | untuk menahan tebak-tebakan password.
     */
-    'api_key' => env('API_KEY'),
+    // Nilai kosong/0 jangan sampai jadi limit 0 (semua login ditolak).
+    'login_rate_limit' => max(1, (int) (env('LOGIN_RATE_LIMIT') ?: 5)),
 
     /*
-    | Batas request per menit per IP untuk seluruh route /api.
+    | Nama apotek untuk judul halaman dan kop struk.
     */
-    // Nilai kosong/0 jangan sampai jadi limit 0 (semua request kena 429).
-    'rate_limit' => max(1, (int) (env('API_RATE_LIMIT') ?: 60)),
+    'nama' => env('APOTEK_NAMA') ?: 'Apotek Sehat',
+    'alamat' => env('APOTEK_ALAMAT') ?: 'Jl. Contoh No. 1',
+    'telepon' => env('APOTEK_TELEPON') ?: '-',
 ];
